@@ -1,0 +1,1 @@
+export const serverPath = 'https://political-juniper-acrylic.glitch.me/'
