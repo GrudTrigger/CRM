@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { serverPath } from "../helpers/variables";
-import { useSelector } from "react-redux";
 
 const AddForm = () => {
   const [name, setName] = useState("");
@@ -10,8 +9,6 @@ const AddForm = () => {
   const [product, setProduct] = useState("course-html");
   const [status, setStatus] = useState("new");
 
-  const { a } = useSelector((state) => state);
-  console.log(a);
   const navigate = useNavigate();
 
   const clearForm = () => {
