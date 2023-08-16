@@ -6,11 +6,7 @@ import LeftPanelFilter from "../LeftPanelFilter/LeftPanelFilter";
 import { useEffect } from "react";
 import { serverPath } from "../helpers/variables";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setCourseFilter,
-  setFilterData,
-  setStatusFilter,
-} from "../Store/tableSlice";
+import { setFilterData } from "../Store/tableSlice";
 
 const TablePage = () => {
   const dispatch = useDispatch();
@@ -34,17 +30,7 @@ const TablePage = () => {
     };
 
     fetchData();
-  }, [courseFilter, statusFilter]);
-
-  const handleStatusChange = (event) => {
-    const newStatus = event.target.dataset.value;
-    dispatch(setStatusFilter(newStatus));
-  };
-
-  const handleCourseChange = (event) => {
-    const newCourse = event.target.value;
-    dispatch(setCourseFilter(newCourse));
-  };
+  }, [dispatch, courseFilter, statusFilter]);
 
   return (
     <section className="with-nav body--dashboard">
@@ -72,11 +58,8 @@ const TablePage = () => {
         <div className="container-fluid">
           <div className="admin-heading-1">Все заявки</div>
 
-          <FilterForm
-            handleStatusChange={handleStatusChange}
-            handleCourseChange={handleCourseChange}
-          />
-          {filterData && <Table filterData={filterData} />}
+          <FilterForm />
+          {filterData && <Table />}
         </div>
       </div>
     </section>
