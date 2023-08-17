@@ -8,15 +8,7 @@ import { useSelector } from "react-redux";
 const EditPage = () => {
   const [data, setData] = useState(null);
 
-  const { filterData } = useSelector((state) => state.table);
-
   const { id } = useParams();
-  console.log(id);
-  console.log(filterData);
-
-  // Добавить новой стейт и рдьюсер и акшен для одной заявки ?
-  const application = filterData.filter((app) => app.id === Number(id));
-  console.log(application);
 
   useEffect(() => {
     fetch(serverPath + "applications/" + id)

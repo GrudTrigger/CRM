@@ -6,32 +6,24 @@ import LeftPanelFilter from "../LeftPanelFilter/LeftPanelFilter";
 import { useEffect } from "react";
 import { serverPath } from "../helpers/variables";
 import { useDispatch, useSelector } from "react-redux";
-import { setFilterData } from "../Store/tableSlice";
+import { fetchData, setFilterData } from "../Store/tableSlice";
 
 const TablePage = () => {
   const dispatch = useDispatch();
   const { filterData, statusFilter, courseFilter } = useSelector(
     (state) => state.table,
   );
-
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `${serverPath}applications?${
-            courseFilter === "all" ? "" : `product=${courseFilter}`
-          }${statusFilter === "all" ? "" : `&status=${statusFilter}`}`,
-        );
-        const data = await response.json();
-        dispatch(setFilterData(data));
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
+    dispatch(
+      fetchData(
+        `${serverPath}applications?${
+          courseFilter === "all" ? "" : `product=${courseFilter}`
+        }${statusFilter === "all" ? "" : `&status=${statusFilter}`}`,
+      ),
+    );
   }, [dispatch, courseFilter, statusFilter]);
 
+  console.log(filterData);
   return (
     <section className="with-nav body--dashboard">
       <NavBar />

@@ -1,4 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+export const fetchData = createAsyncThunk("table/fetchData", async (url) => {
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+});
 
 const initialState = {
   filterData: null,
@@ -19,6 +25,11 @@ const tableSlice = createSlice({
     setCourseFilter(state, action) {
       state.courseFilter = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchData.fulfilled, (state, action) => {
+      state.filterData = action.payload;
+    });
   },
 });
 
