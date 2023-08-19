@@ -23,7 +23,6 @@ const TablePage = () => {
     );
   }, [dispatch, courseFilter, statusFilter]);
 
-  console.log(filterData);
   return (
     <section className="with-nav body--dashboard">
       <NavBar />

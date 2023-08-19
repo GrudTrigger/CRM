@@ -1,35 +1,31 @@
-import { useParams, useNavigate } from "react-router-dom";
-// import useFetch from "../useFetch/useFetch";
-import { useState, useEffect } from "react";
-import { serverPath } from "../helpers/variables";
-const EditForm = ({ data, id, setData }) => {
-  const navigate = useNavigate("/table");
+import { useNavigate } from "react-router-dom";
 
+import { getUrlId, serverPath } from "../helpers/variables";
+import { useDispatch } from "react-redux";
+import { editApplication, uptadeApplication } from "../Store/editSlice";
+const EditForm = ({ application, id }) => {
+  const navigate = useNavigate("/table");
+  const dispatch = useDispatch();
   const editApplications = (event) => {
     event.preventDefault();
-    setData(() => {
-      return {
-        ...data,
-        [event.target.email]: event.target.value,
-        [event.target.name]: event.target.value,
-        [event.target.phone]: event.target.value,
-        [event.target.product]: event.target.value,
-        [event.target.status]: event.target.value,
-      };
-    });
+    dispatch(
+      editApplication({ name: event.target.name, value: event.target.value }),
+    );
   };
-
+  const applicationURL = getUrlId(serverPath, id);
   const submitForm = (event) => {
     event.preventDefault();
-    console.log(data);
-    fetch(serverPath + "applications/" + id, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    }).then(() => {
-      console.log("edit app");
-      navigate("/table");
-    });
+    dispatch(uptadeApplication({ url: applicationURL, application }));
+    navigate("/table");
+    // console.log(data);
+    // fetch(serverPath + "applications/" + id, {
+    //   method: "PUT",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(data),
+    // }).then(() => {
+    //   console.log("edit app");
+    //   navigate("/table");
+    // });
   };
 
   const deleteApplications = (event) => {
@@ -40,6 +36,7 @@ const EditForm = ({ data, id, setData }) => {
       navigate("/table");
     });
   };
+
   return (
     <form id="form" onSubmit={submitForm}>
       <div className="card mb-4">
@@ -50,7 +47,7 @@ const EditForm = ({ data, id, setData }) => {
               <strong>ID:</strong>
             </div>
             <div className="col">
-              Заявка №<span id="number">{data.id}</span>
+              Заявка №<span id="number">{application.id}</span>
             </div>
             <input name="id" type="hidden" id="id" />
           </div>
@@ -60,7 +57,7 @@ const EditForm = ({ data, id, setData }) => {
               <strong>Дата создания:</strong>
             </div>
             <div className="col" id="date">
-              {data.date}
+              {application.date}
             </div>
           </div>
 
@@ -72,7 +69,7 @@ const EditForm = ({ data, id, setData }) => {
               <select
                 id="product"
                 onChange={editApplications}
-                value={data.product}
+                value={application.product}
                 name="product"
                 className="custom-select"
               >
@@ -94,7 +91,7 @@ const EditForm = ({ data, id, setData }) => {
                 onChange={editApplications}
                 type="text"
                 className="form-control"
-                value={data.name}
+                value={application.name}
                 id="name"
                 name="name"
               />
@@ -110,7 +107,7 @@ const EditForm = ({ data, id, setData }) => {
                 onChange={editApplications}
                 type="text"
                 className="form-control"
-                value={data.email}
+                value={application.email}
                 id="email"
                 name="email"
               />
@@ -126,7 +123,7 @@ const EditForm = ({ data, id, setData }) => {
                 onChange={editApplications}
                 type="text"
                 className="form-control"
-                value={data.phone}
+                value={application.phone}
                 id="phone"
                 name="phone"
               />
@@ -143,7 +140,7 @@ const EditForm = ({ data, id, setData }) => {
                 className="custom-select"
                 id="status"
                 name="status"
-                value={data.status}
+                value={application.status}
               >
                 {/* <option selected="">Статус</option> */}
                 <option value="new">Новая</option>

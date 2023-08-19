@@ -1,24 +1,21 @@
 import NavBar from "../NavBar/NavBar";
 import EditForm from "../EditForm/EditForm";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { serverPath } from "../helpers/variables";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { getUrlId, serverPath } from "../helpers/variables";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchApplication } from "../Store/editSlice";
 
 const EditPage = () => {
-  const [data, setData] = useState(null);
-
   const { id } = useParams();
 
+  const { application } = useSelector((state) => state.edit);
+  const dispatch = useDispatch();
+  const applicationURL = getUrlId(serverPath, id);
   useEffect(() => {
-    fetch(serverPath + "applications/" + id)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setData(data);
-      });
+    dispatch(fetchApplication(applicationURL));
   }, []);
+  console.log(application);
 
   return (
     <section className="with-nav">
@@ -31,15 +28,15 @@ const EditPage = () => {
               <div className="admin-heading-1">Работа с заявкой</div>
             </div>
             <div className="col text-right">
-              <a href="index.html" className="btn btn-link">
-                Вернуться назад
-              </a>
+              <Link to={"/table"} className="btn btn-link">
+                Вернуться назад.
+              </Link>
             </div>
           </div>
 
           <div className="row">
             <div className="col">
-              {data && <EditForm data={data} setData={setData} id={id} />}
+              {application && <EditForm application={application} id={id} />}
             </div>
           </div>
         </div>
