@@ -10,6 +10,7 @@ const initialState = {
   filterData: null,
   statusFilter: "all",
   courseFilter: "all",
+  isLoading: false,
 };
 
 const tableSlice = createSlice({
@@ -27,7 +28,11 @@ const tableSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchData.pending, (state) => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchData.fulfilled, (state, action) => {
+      state.isLoading = false;
       state.filterData = action.payload;
     });
   },

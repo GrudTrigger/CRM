@@ -2,17 +2,20 @@ import NavBar from "../NavBar/NavBar";
 import FilterForm from "../FilterForm/FilterForm";
 import Table from "../Table/Table";
 import LeftPanelFilter from "../LeftPanelFilter/LeftPanelFilter";
-
+import ReactLoading from "react-loading";
 import { useEffect } from "react";
 import { serverPath } from "../helpers/variables";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchData, setFilterData } from "../Store/tableSlice";
+import { fetchData } from "../Store/tableSlice";
 
 const TablePage = () => {
   const dispatch = useDispatch();
   const { filterData, statusFilter, courseFilter } = useSelector(
     (state) => state.table,
   );
+  const isLoading = useSelector((state) => state.table.isLoading);
+  console.log(isLoading);
+
   useEffect(() => {
     dispatch(
       fetchData(
@@ -32,16 +35,6 @@ const TablePage = () => {
           <div className="left-panel__logo-title">CRM заявки</div>
         </div>
 
-        <div className="left-panel__user clearfix">
-          <div className="left-panel__user-photo">
-            <img src="img/avatars/avatar-128.jpg" alt="Avatar" />
-          </div>
-          <div className="left-panel__user-name">
-            Петр <br />
-            Васильевич
-          </div>
-        </div>
-
         <LeftPanelFilter />
       </div>
 
@@ -50,7 +43,18 @@ const TablePage = () => {
           <div className="admin-heading-1">Все заявки</div>
 
           <FilterForm />
-          {filterData && <Table />}
+          {/*{filterData && <Table />}*/}
+          {isLoading === true ? (
+            <ReactLoading
+              type={"spinningBubbles"}
+              color={"#9CD6FC"}
+              height={"5%"}
+              width={"5%"}
+              className={"loading-ring"}
+            />
+          ) : (
+            filterData && <Table />
+          )}
         </div>
       </div>
     </section>

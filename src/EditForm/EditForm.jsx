@@ -2,9 +2,13 @@ import { useNavigate } from "react-router-dom";
 
 import { getUrlId, serverPath } from "../helpers/variables";
 import { useDispatch } from "react-redux";
-import { editApplication, uptadeApplication } from "../Store/editSlice";
+import {
+  editApplication,
+  updateApplication,
+  deleteApplication,
+} from "../Store/editSlice";
 const EditForm = ({ application, id }) => {
-  const navigate = useNavigate("/table");
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const editApplications = (event) => {
     event.preventDefault();
@@ -13,28 +17,26 @@ const EditForm = ({ application, id }) => {
     );
   };
   const applicationURL = getUrlId(serverPath, id);
-  const submitForm = (event) => {
+  const submitForm = async (event) => {
     event.preventDefault();
-    dispatch(uptadeApplication({ url: applicationURL, application }));
-    navigate("/table");
-    // console.log(data);
-    // fetch(serverPath + "applications/" + id, {
-    //   method: "PUT",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(data),
-    // }).then(() => {
-    //   console.log("edit app");
-    //   navigate("/table");
-    // });
+    try {
+      await dispatch(
+        updateApplication({ url: applicationURL, data: application }),
+      );
+      navigate("/table");
+    } catch (error) {
+      console.error("Error update application", error);
+    }
   };
 
-  const deleteApplications = (event) => {
+  const deleteApplications = async (event) => {
     event.preventDefault();
-    fetch(serverPath + "applications/" + id, {
-      method: "DELETE",
-    }).then(() => {
+    try {
+      await dispatch(deleteApplication(applicationURL));
       navigate("/table");
-    });
+    } catch (error) {
+      console.error("Error delete application", error);
+    }
   };
 
   return (

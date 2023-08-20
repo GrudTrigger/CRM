@@ -15,7 +15,6 @@ const EditPage = () => {
   useEffect(() => {
     dispatch(fetchApplication(applicationURL));
   }, []);
-  console.log(application);
 
   return (
     <section className="with-nav">

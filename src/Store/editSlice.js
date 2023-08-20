@@ -9,17 +9,25 @@ export const fetchApplication = createAsyncThunk(
   },
 );
 
-export const uptadeApplication = createAsyncThunk(
-  "uptadeApplication",
+export const updateApplication = createAsyncThunk(
+  "edit/updateApplication",
   async (arg) => {
     const { url, data } = arg;
-    const response = await fetch(url, {
+    await fetch(url, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    const updateData = await response.json();
-    return updateData;
+    return data;
+  },
+);
+
+export const deleteApplication = createAsyncThunk(
+  "edit/deleteApplication",
+  async (url) => {
+    await fetch(url, {
+      method: "DELETE",
+    });
   },
 );
 
@@ -40,8 +48,11 @@ const editSlice = createSlice({
     builder.addCase(fetchApplication.fulfilled, (state, action) => {
       state.application = action.payload;
     });
-    builder.addCase(uptadeApplication.fulfilled, (state, action) => {
+    builder.addCase(updateApplication.fulfilled, (state, action) => {
       state.application = action.payload;
+    });
+    builder.addCase(deleteApplication.fulfilled, (state, action) => {
+      state.application = null;
     });
   },
 });
